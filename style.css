@@ -1,0 +1,80 @@
+:root {
+    --backdrop: #3f352d;
+    --bg-main: #DCD4CA;
+    --bg-keypad: #D0C7B8;
+    --bg-display: #1B3C34;
+    --bg-display-banner: #202C29;
+    --text-main: #E9E7E4;
+    --text-secondary: #FFD337;
+    --text-display: #5DD6A3;
+    --btn: #60534C;
+    --btn-special: #CF532B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.flex,
+body {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: var(--backdrop);
+    color: var(--text-main);
+    min-height: 100dvh;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 12px;
+}
+
+a {
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+.calculator {
+    flex-direction: column;
+    gap: 10px;
+
+    width: 300px;
+    height: 600px;
+
+    padding: 10px;
+    background-color: var(--bg-main);
+    border-radius: 15px;
+    justify-content: center;
+}
+
+.display {
+    flex: 1;
+    background-color: var(--bg-display);
+    border-radius: 7.5px;
+    height: 150px;
+}
+
+.banner {
+    padding: 10px;
+    border-radius: 15px 15px 0 0;
+    flex: 1;
+    width: inherit;
+    height: 72px;
+    background-color: var(--bg-display-banner);
+}
+
+.keypad {
+    flex: 2;
+    border-radius: 7.5px;
+    background-color: var(--bg-keypad);
+}
