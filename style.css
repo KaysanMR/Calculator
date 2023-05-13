@@ -9,12 +9,12 @@
     --text-display: #5DD6A3;
     --btn: #60534C;
     --btn-special: #CF532B;
+    --btn-operator: #413B37;
 }
 
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 .flex,
@@ -24,6 +24,7 @@ body {
 }
 
 body {
+    box-sizing: border-box;
     font-family: 'Share Tech Mono', monospace;
     background-color: var(--backdrop);
     color: var(--text-main);
@@ -50,7 +51,7 @@ a {
     gap: 10px;
 
     width: 300px;
-    height: 600px;
+    height: 500px;
 
     padding: 10px;
     background-color: var(--bg-main);
@@ -91,6 +92,53 @@ a {
 
 .keypad {
     flex: 2;
+    flex-direction: column;
     border-radius: 7.5px;
+    padding: 10px;
     background-color: var(--bg-keypad);
+    gap: 10px;
+}
+
+.main {
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-main);
+    background-color: var(--btn);
+    font-size: 36px;
+    width: 62px;
+    height: 58px;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 6px 0 0 #4b403a;
+}
+
+.btn:active {
+    box-shadow: none;
+    translate: 0 6px ;
+}
+
+.operator {
+    color: var(--text-secondary);
+    background-color: var(--btn-operator);
+    box-shadow: 0 6px 0 0 #27211c;
+}
+
+.special{
+    background-color: var(--btn-special);
+    box-shadow: 0 6px 0 0 #ad3a13;
+}
+
+.top-row {
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.slim {
+    font-size: 16px;
+    font-weight: bold;
+    height: 30px;;
 }
