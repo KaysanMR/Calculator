@@ -134,7 +134,7 @@ a {
     height: 30px;;
 }
 
-input[value="DEL"] {
+input[value="CLR"] {
     align-self: start;
     margin-left: 143px;
 }
