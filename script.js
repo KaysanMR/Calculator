@@ -19,12 +19,14 @@ const getInput = e => {
     case(void(0)): return;
     case("CLR"): return init();
     case("DEL"): return console.log('');
-    case("="): return result.textContent = calculatinator(expression.textContent);
+    case("="): return showResult();
     default:
       expression.textContent += e.target.value;
       break;
   };  
 };
+
+const showResult = () => result.textContent = calculatinator(expression.textContent);
 
 //super cool calculator code stuff
 
