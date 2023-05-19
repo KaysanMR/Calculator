@@ -18,7 +18,7 @@ const getInput = e => {
   switch(e.target.value) {
     case(void(0)): return;
     case("CLR"): return init();
-    case("DEL"): return console.log('');
+    case("DEL"): return del();
     case("="): return showResult();
     default:
       expression.textContent += e.target.value;
@@ -27,6 +27,10 @@ const getInput = e => {
 };
 
 const showResult = () => result.textContent = calculatinator(expression.textContent);
+
+const del = () => {
+  return expression.textContent = expression.textContent.slice(0,-1);
+};
 
 //super cool calculator code stuff
 
