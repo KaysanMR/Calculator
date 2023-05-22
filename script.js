@@ -55,14 +55,21 @@ const checkError = eqn => {
   };
 };
 
-
+const getOperands = (eqn,operation) => {
+  switch (operation) {
+    case ("div"): 
+      operands = [...eqn.match(regEx.divide)];
+      break;
+    case ("mul"): 
+      operands = [...eqn.match(regEx.multiply)];
+      break;
+    default:
+      operands = [...eqn.match(regEx.operands)];
+      break;
+  };
+};
 
 const divideAll = eqn => {
-  
-  const divSplit = eqn => {
-    operands = [...eqn.match(regEx.divide)]
-    return operands;
-  };
   
   const divide = eqn => {
     operands = [...eqn.match(regEx.operands)];
@@ -72,7 +79,7 @@ const divideAll = eqn => {
   
   while (eqn.includes("÷") || eqn.includes("/")) {
     
-    divSplit(eqn);
+    getOperands(eqn,"div");
     operands.forEach(item => {
       eqn = eqn.replace(item, `+${divide(item)}`);
     });
@@ -85,11 +92,6 @@ const divideAll = eqn => {
 
 const multiplyAll = eqn => {
   
-  const mulSplit = eqn => {
-    operands = [...eqn.match(regEx.multiply)]
-    return operands;
-  };
-  
   const multiply = eqn => {
     operands = [...eqn.match(regEx.operands)];
     let product = parseFloat(operands[0])*parseFloat(operands[1]);
@@ -98,7 +100,7 @@ const multiplyAll = eqn => {
   
   while (eqn.includes("×") || eqn.includes("*")) {
     
-    mulSplit(eqn);
+    getOperands(eqn,"mul");
     operands.forEach(item => {
       eqn = eqn.replace(item, `+${multiply(item)}`);
     });
@@ -111,7 +113,7 @@ const multiplyAll = eqn => {
 
 const sumAll = eqn => {
   
-  const operands = [...eqn.match(regEx.operands)];
+  getOperands(eqn);
 
   let sum = 0;
   operands.forEach(item => sum += parseFloat(item));
