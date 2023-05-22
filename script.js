@@ -27,8 +27,8 @@ const getInput = e => {
 };
 
 const showResult = () => {
-  checkError(expression.textContent);
   result.textContent = calculatinator(expression.textContent);
+  checkError(expression.textContent);
 };
 
 const del = () => {
@@ -41,17 +41,21 @@ const regEx = {
   operands : /([-+]?)((\d+\.\d*)|\d+)/g,
   divide : /([-+]?)((\d+\.\d*)|\d+)[÷\/]([-+]?)((\d+\.\d*)|\d+)/g,
   multiply : /([-+]?)((\d+\.\d*)|\d+)[×\*]([-+]?)((\d+\.\d*)|\d+)/g,
-  error : /[÷\/×\*\+\.]{2}/g,
+  syntax : /[÷\/×\*]{2}/g,
   zero : /[÷\/]0/,
+  decimal : /^[+-]?(([1-9][0-9]*)?[0-9](\.[0-9]*)?|\.[0-9]+)$/g,
+
 };
 
 const checkError = eqn => {
-  if ((regEx.error).test(eqn)) {
+  if ((regEx.syntax).test(eqn)) {
     return result.textContent = "SYNTAX ERROR";
   } else if ((regEx.zero).test(eqn)) {
     return result.textContent = "DIVISION ERROR";
   };
 };
+
+
 
 const divideAll = eqn => {
   
