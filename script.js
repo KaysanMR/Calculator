@@ -22,7 +22,7 @@ const getInput = e => {
     case(void(0)): return;
     case("CLR"): return init();
     case("DEL"): return del();
-    case("="): return updateDisplay(calculatinator(expression.textContent));
+    case("="): return calculatinator(expression.textContent);
     default:
       expression.textContent += e.target.value;
       break;
@@ -51,24 +51,12 @@ const regEx = {
 
 const checkError = eqn => {
   if ((regEx.syntax).test(eqn) || (regEx.decimal).test(eqn)) {
-    error = "syntax";
+    error = "SYNTAX ERROR";
     return true;
   } else if ((regEx.zero).test(eqn)) {
-    error = "zero";
+    error = "DIVISION ERROR";
     return true;
   } else return false;
-};
-
-const errorMsg = error => {
-  switch (error) {
-    case ("syntax"):
-      updateDisplay("SYNTAX ERROR");
-    case ("zero"):
-      updateDisplay("DIVISION ERROR");
-    default:
-      console.error("an error has occured!")
-      updateDisplay("ERROR");
-  };
 };
 
 const getOperands = (eqn,operation) => {
@@ -139,10 +127,12 @@ const sumAll = eqn => {
 
 const calculatinator = eqn => {
   if(checkError(eqn)){ 
-    errorMsg(checkError());
+    return updateDisplay(error);
   } else {
     out = sumAll(multiplyAll(divideAll(eqn)));
-    return out % 1 != 0? out.toFixed(2):out; //only show decimals if the value is not rounded
+    return updateDisplay(
+      out % 1 != 0? out.toFixed(2):out //only show decimals if the value is not rounded
+    );
   };
 };
  
