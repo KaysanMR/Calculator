@@ -43,7 +43,7 @@ const regEx = {
   multiply : /([-+]?)((\d+\.\d*)|\d+)[×\*]([-+]?)((\d+\.\d*)|\d+)/g,
   syntax : /[÷\/×\*]{2}/g,
   zero : /[÷\/]0/,
-  decimal : /^[+-]?(([1-9][0-9]*)?[0-9](\.[0-9]*)?|\.[0-9]+)$/g,
+  decimal : /^\d+(\.\d{2})?$/,
 
 };
 
@@ -53,6 +53,14 @@ const checkError = eqn => {
   } else if ((regEx.zero).test(eqn)) {
     return result.textContent = "DIVISION ERROR";
   };
+};
+
+const checkOperands = operands => {
+  let valid = 0, invalid = 0;
+  operands.forEach(item => {
+    (regEx.decimal).test(item)? valid++ : invalid++;
+  });
+  return invalid >= 1? result.textContent = "SYNTAX ERROR":operands;
 };
 
 const getOperands = (eqn,operation) => {
@@ -67,7 +75,6 @@ const getOperands = (eqn,operation) => {
       operands = [...eqn.match(regEx.operands)];
       break;
   };
-
 };
 
 const divideAll = eqn => {
