@@ -27,8 +27,8 @@ const getInput = e => {
 };
 
 const showResult = () => {
-  result.textContent = calculatinator(expression.textContent);
   checkError(expression.textContent);
+  result.textContent = calculatinator(expression.textContent);
 };
 
 const del = () => {
@@ -67,6 +67,7 @@ const getOperands = (eqn,operation) => {
       operands = [...eqn.match(regEx.operands)];
       break;
   };
+
 };
 
 const divideAll = eqn => {
