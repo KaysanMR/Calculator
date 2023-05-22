@@ -22,15 +22,15 @@ const getInput = e => {
     case(void(0)): return;
     case("CLR"): return init();
     case("DEL"): return del();
-    case("="): return showResult();
+    case("="): return updateDisplay(calculatinator(expression.textContent));
     default:
       expression.textContent += e.target.value;
       break;
   };  
 };
 
-const showResult = () => {
-  result.textContent = calculatinator(expression.textContent);
+const updateDisplay = text => {
+  result.textContent = text;
 };
 
 const del = () => {
@@ -44,7 +44,7 @@ const regEx = {
   divide : /([-+]?)((\d+\.\d*)|\d+)[÷\/]([-+]?)((\d+\.\d*)|\d+)/g,
   multiply : /([-+]?)((\d+\.\d*)|\d+)[×\*]([-+]?)((\d+\.\d*)|\d+)/g,
   syntax : /[÷\/×\*]{2}/g,
-  zero : /[÷\/]0/,
+  zero : /[÷\/]0+(?:\.?0*)?(?!\d)/,
   decimal : /[\.]{2}/g,
 
 };
@@ -62,15 +62,12 @@ const checkError = eqn => {
 const errorMsg = error => {
   switch (error) {
     case ("syntax"):
-      result.textContent = "SYNTAX ERROR";
-      return;
+      updateDisplay("SYNTAX ERROR");
     case ("zero"):
-      result.textContent = "DIVISION ERROR";
-      return;
+      updateDisplay("DIVISION ERROR");
     default:
       console.error("an error has occured!")
-      result.textContent = "ERROR";
-      break;
+      updateDisplay("ERROR");
   };
 };
 
