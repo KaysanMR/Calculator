@@ -4,6 +4,7 @@ const keypad = document.querySelector(".keypad");
 
 let result = document.querySelector(".result");
 let expression = document.querySelector(".expression");
+let error = "";
 
 keypad.addEventListener("click", e => getInput(e));
 keypad.addEventListener("touch", e => getInput(e));
@@ -12,6 +13,7 @@ const init = () => {
   console.clear();
   expression.textContent = "";
   result.textContent = "";
+  error = "";
   console.log("initialized");
 };
 
@@ -43,18 +45,34 @@ const regEx = {
   multiply : /([-+]?)((\d+\.\d*)|\d+)[×\*]([-+]?)((\d+\.\d*)|\d+)/g,
   syntax : /[÷\/×\*]{2}/g,
   zero : /[÷\/]0/,
-  decimal : /[\.]{2}/,
+  decimal : /[\.]{2}/g,
 
 };
 
 const checkError = eqn => {
-  if ((regEx.syntax).test(eqn)) {
-    return result.textContent = "SYNTAX ERROR";
+  if ((regEx.syntax).test(eqn) || (regEx.decimal).test(eqn)) {
+    error = "syntax";
+    return true;
   } else if ((regEx.zero).test(eqn)) {
-    return result.textContent = "DIVISION ERROR";
-  };
+    error = "zero";
+    return true;
+  } else return false;
 };
 
+const errorMsg = error => {
+  switch (error) {
+    case ("syntax"):
+      result.textContent = "SYNTAX ERROR";
+      return;
+    case ("zero"):
+      result.textContent = "DIVISION ERROR";
+      return;
+    default:
+      console.error("an error has occured!")
+      result.textContent = "ERROR";
+      break;
+  };
+};
 
 const getOperands = (eqn,operation) => {
   switch (operation) {
@@ -68,7 +86,6 @@ const getOperands = (eqn,operation) => {
       operands = [...eqn.match(regEx.operands)];
       break;
   };
-  console.log(operands);
 };
 
 const divideAll = eqn => {
@@ -124,9 +141,12 @@ const sumAll = eqn => {
 };
 
 const calculatinator = eqn => {
-  checkError(eqn);
-  out = sumAll(multiplyAll(divideAll(eqn)));
-  return out % 1 != 0? out.toFixed(2):out; //only show decimals if the value is not rounded
+  if(checkError(eqn)){ 
+    errorMsg(checkError());
+  } else {
+    out = sumAll(multiplyAll(divideAll(eqn)));
+    return out % 1 != 0? out.toFixed(2):out; //only show decimals if the value is not rounded
+  };
 };
  
 init();
