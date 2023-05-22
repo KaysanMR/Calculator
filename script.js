@@ -9,6 +9,7 @@ keypad.addEventListener("click", e => getInput(e));
 keypad.addEventListener("touch", e => getInput(e));
 
 const init = () => {
+  console.clear();
   expression.textContent = "";
   result.textContent = "";
   console.log("initialized");
@@ -27,7 +28,6 @@ const getInput = e => {
 };
 
 const showResult = () => {
-  checkError(expression.textContent);
   result.textContent = calculatinator(expression.textContent);
 };
 
@@ -43,7 +43,7 @@ const regEx = {
   multiply : /([-+]?)((\d+\.\d*)|\d+)[×\*]([-+]?)((\d+\.\d*)|\d+)/g,
   syntax : /[÷\/×\*]{2}/g,
   zero : /[÷\/]0/,
-  decimal : /^\d+(\.\d{2})?$/,
+  decimal : /[\.]{2}/,
 
 };
 
@@ -55,13 +55,6 @@ const checkError = eqn => {
   };
 };
 
-const checkOperands = operands => {
-  let valid = 0, invalid = 0;
-  operands.forEach(item => {
-    (regEx.decimal).test(item)? valid++ : invalid++;
-  });
-  return invalid >= 1? result.textContent = "SYNTAX ERROR":operands;
-};
 
 const getOperands = (eqn,operation) => {
   switch (operation) {
@@ -75,6 +68,7 @@ const getOperands = (eqn,operation) => {
       operands = [...eqn.match(regEx.operands)];
       break;
   };
+  console.log(operands);
 };
 
 const divideAll = eqn => {
@@ -130,6 +124,7 @@ const sumAll = eqn => {
 };
 
 const calculatinator = eqn => {
+  checkError(eqn);
   out = sumAll(multiplyAll(divideAll(eqn)));
   return out % 1 != 0? out.toFixed(2):out; //only show decimals if the value is not rounded
 };
