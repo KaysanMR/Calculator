@@ -4,13 +4,16 @@ const keypad = document.querySelector(".keypad");
 
 let result = document.querySelector(".result");
 let expression = document.querySelector(".expression");
+let error = "";
 
 keypad.addEventListener("click", e => getInput(e));
 keypad.addEventListener("touch", e => getInput(e));
 
 const init = () => {
+  console.clear();
   expression.textContent = "";
   result.textContent = "";
+  error = "";
   console.log("initialized");
 };
 
@@ -19,14 +22,16 @@ const getInput = e => {
     case(void(0)): return;
     case("CLR"): return init();
     case("DEL"): return del();
-    case("="): return showResult();
+    case("="): return calculatinator(expression.textContent);
     default:
       expression.textContent += e.target.value;
       break;
   };  
 };
 
-const showResult = () => result.textContent = calculatinator(expression.textContent);
+const updateDisplay = text => {
+  result.textContent = text;
+};
 
 const del = () => {
   return expression.textContent = expression.textContent.slice(0,-1);
@@ -38,14 +43,36 @@ const regEx = {
   operands : /([-+]?)((\d+\.\d*)|\d+)/g,
   divide : /([-+]?)((\d+\.\d*)|\d+)[÷\/]([-+]?)((\d+\.\d*)|\d+)/g,
   multiply : /([-+]?)((\d+\.\d*)|\d+)[×\*]([-+]?)((\d+\.\d*)|\d+)/g,
+  syntax : /[÷\/×\*]{2}/,
+  zero : /[÷\/]0+(?:\.?0*)?(?!\d)/,
+  decimal : /[\.]{2}|(?<!\d)\./,
+};
+
+const checkError = eqn => {
+  if ((regEx.syntax).test(eqn) || (regEx.decimal).test(eqn)) {
+    error = "SYNTAX ERROR";
+    return true;
+  } else if ((regEx.zero).test(eqn)) {
+    error = "DIVISION ERROR";
+    return true;
+  } else return false;
+};
+
+const getOperands = (eqn,operation) => {
+  switch (operation) {
+    case ("div"): 
+      operands = [...eqn.match(regEx.divide)];
+      break;
+    case ("mul"): 
+      operands = [...eqn.match(regEx.multiply)];
+      break;
+    default:
+      operands = [...eqn.match(regEx.operands)];
+      break;
+  };
 };
 
 const divideAll = eqn => {
-  
-  const divSplit = eqn => {
-    operands = [...eqn.match(regEx.divide)]
-    return operands;
-  };
   
   const divide = eqn => {
     operands = [...eqn.match(regEx.operands)];
@@ -55,7 +82,7 @@ const divideAll = eqn => {
   
   while (eqn.includes("÷") || eqn.includes("/")) {
     
-    divSplit(eqn);
+    getOperands(eqn,"div");
     operands.forEach(item => {
       eqn = eqn.replace(item, `+${divide(item)}`);
     });
@@ -68,11 +95,6 @@ const divideAll = eqn => {
 
 const multiplyAll = eqn => {
   
-  const mulSplit = eqn => {
-    operands = [...eqn.match(regEx.multiply)]
-    return operands;
-  };
-  
   const multiply = eqn => {
     operands = [...eqn.match(regEx.operands)];
     let product = parseFloat(operands[0])*parseFloat(operands[1]);
@@ -81,7 +103,7 @@ const multiplyAll = eqn => {
   
   while (eqn.includes("×") || eqn.includes("*")) {
     
-    mulSplit(eqn);
+    getOperands(eqn,"mul");
     operands.forEach(item => {
       eqn = eqn.replace(item, `+${multiply(item)}`);
     });
@@ -94,7 +116,7 @@ const multiplyAll = eqn => {
 
 const sumAll = eqn => {
   
-  const operands = [...eqn.match(regEx.operands)];
+  getOperands(eqn);
 
   let sum = 0;
   operands.forEach(item => sum += parseFloat(item));
@@ -103,8 +125,14 @@ const sumAll = eqn => {
 };
 
 const calculatinator = eqn => {
-  out = sumAll(multiplyAll(divideAll(eqn)));
-  return out % 1 != 0? out.toFixed(2):out; //only show decimals if the value is not rounded
+  if(checkError(eqn)){ 
+    return updateDisplay(error);
+  } else {
+    out = sumAll(multiplyAll(divideAll(eqn)));
+    return updateDisplay(
+      out % 1 != 0? out.toFixed(2):out //only show decimals if the value is not rounded
+    );
+  };
 };
  
 init();
